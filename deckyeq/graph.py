@@ -6,7 +6,7 @@ import math
 from pathlib import Path
 from .model import FREQUENCIES, LIMITS, flat_eq, validate_eq
 
-SINK_NAME = "DeckyEQ"  # Steam lists a virtual sink by its node name, as it has no sound card name.
+SINK_NAME = "DeckyEQ-internal"  # Steam lists a virtual sink by its node name, as it has no sound card name.
 LEGACY_SINK_NAME = "deckyeq.sink"  # DeckyEQ 1.0's virtual output, still recognised for recovery.
 PLAYBACK_NAME = "deckyeq.playback"
 SHELF_Q = 2 ** -0.5
@@ -173,7 +173,7 @@ def filter_config(eq, target, owner, stage=STAGE_LIBRARY, boost=0.0):
                 {"name": "libpipewire-module-client-node"},
                 {"name": "libpipewire-module-adapter"},
                 {"name": "libpipewire-module-filter-chain", "args": {
-                    "node.description": "DeckyEQ", "media.name": "DeckyEQ", "audio.channels": 2,
+                    "node.description": "DeckyEQ (internal)", "media.name": "DeckyEQ", "audio.channels": 2,
                     "audio.position": ["FL", "FR"],
                     "filter.graph": {"nodes": nodes, "links": links,
                                      "inputs": [f"bass_{c}:In" for c in CHANNELS],
@@ -182,7 +182,7 @@ def filter_config(eq, target, owner, stage=STAGE_LIBRARY, boost=0.0):
                     # directly or as the default, is linked through this sink first. The filter
                     # is never chosen as the default output itself (filter.smart.targetable).
                     "capture.props": {"node.name": SINK_NAME, "media.class": "Audio/Sink",
-                                      "node.description": "DeckyEQ", "deckyeq.owner": owner,
+                                      "node.description": "DeckyEQ (internal)", "deckyeq.owner": owner,
                                       "filter.smart": True, "filter.smart.name": "deckyeq",
                                       "filter.smart.target": {"node.name": target},
                                       # No node.always-process: the filter suspends with the output
